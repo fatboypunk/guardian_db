@@ -6,8 +6,8 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
   """
   use Mix.Task
 
-  import Mix.Ecto
   import Mix.Generator
+  import Mix.Ecto
   alias Guardian.DB.Token
 
   @doc false
@@ -18,16 +18,20 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
 
     Enum.each(repos, fn repo ->
       ensure_repo(repo, args)
-      path = migrations_path(repo)
+      path = Ecto.Migrator.migrations_path(repo)
 
       source_path =
         :guardian_db
         |> Application.app_dir()
         |> Path.join("priv/templates/migration.exs.eex")
 
-      generated_file = EEx.eval_file(source_path,
-                                     module_prefix: app_module(),
-                                     db_prefix: Token.prefix())
+      generated_file =
+        EEx.eval_file(
+          source_path,
+          module_prefix: app_module(),
+          db_prefix: Token.prefix()
+        )
+
       target_file = Path.join(path, "#{timestamp()}_guardiandb.exs")
       create_directory(path)
       create_file(target_file, generated_file)

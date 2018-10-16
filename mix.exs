@@ -32,8 +32,9 @@ defmodule Guardian.DB.Mixfile do
   defp deps do
     [
       {:guardian, "~> 1.0"},
-      {:ecto, "~> 2.2"},
-      {:postgrex, "~> 0.13", optional: true},
+      {:ecto, "~> 3.0.0-rc.0"},
+      {:ecto_sql, "~> 3.0.0-rc.0"},
+      {:postgrex, "~> 0.14-rc.1", optional: true},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false}
     ]
@@ -66,6 +67,14 @@ defmodule Guardian.DB.Mixfile do
   end
 
   defp aliases do
-    [test: ["ecto.drop --quiet", "ecto.create --quiet", "guardian.db.gen.migration", "ecto.migrate", "test"]]
+    [
+      test: [
+        "ecto.drop --quiet",
+        "ecto.create --quiet",
+        "guardian.db.gen.migration",
+        "ecto.migrate",
+        "test"
+      ]
+    ]
   end
 end
